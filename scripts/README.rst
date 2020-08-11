@@ -514,7 +514,6 @@ TODOs
      creating the listener thread that monitors the keyboard and ignoring all
      parts of the ``SimulRPi.GPIO`` where the listener thread is being accessed
      (e.g. for starting it).
-
 * Run code `examples`_ involving pressing keyboard keys directly on an RPi (no
   ``ssh``) and post results. **High priority**
 * In :mod:`run_examples`, improve timer accuracy when waiting for a LED to stop
