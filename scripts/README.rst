@@ -499,6 +499,7 @@ Change Log
    * On a computer with ``SimulRPi.GPIO``:
       * macOS: all examples involving "LEDs" and keyboard keys worked
       * RPi OS [Debian-based]: all examples involving only "LEDs" worked
+
         **NOTE:** I was running the script :mod:`run_examples` with ``ssh`` but
         ``pynput`` doesn't detect any pressed keyboard keys even though I set
         my environment variable ``Display``, added ``PYTHONPATH`` to
