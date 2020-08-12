@@ -142,7 +142,7 @@ or computer. If it is run on your computer, it will make use of the module
 which partly fakes `RPi.GPIO`_.
 
 The different code examples are those presented in
-`Examples <#examples>`_
+**Examples**
 and show the capability of ``SimulRPi.GPIO`` for simulating I/O devices on an
 RPi such as push buttons and LEDS.
 
