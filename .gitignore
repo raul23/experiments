@@ -131,3 +131,6 @@ dmypy.json
 # Ignore README files
 README_*.rst
 README*.rst_t
+
+# Ignoe mac file
+.DS_Store
