@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 # Ignore README files
-README*.rst*
+README_*.rst
+README*.rst_t
