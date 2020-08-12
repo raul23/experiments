@@ -1,10 +1,80 @@
 import argparse
+import copy
+import os
+import re
 import traceback
 
-from pyutils.genutils import read_file
+import ipdb
+
+from pyutils.genutils import read_file, write_file
 
 
 VERSION = "0.0.0a0"
+README_FILE_TYPES = ['rst']
+# Websites where the READMEs will be published, e.g. GitHub
+WEBSITES = {
+    'github': {
+        'default_filename': "README_github",
+        'long_opt_name': "github",
+        'site_name': "GitHub",
+    },
+    'pypi': {
+        'default_filename': "README_pypi",
+        'long_opt_name': "pypi",
+        'site_name': "PyPI",
+    },
+    'readthedocs': {
+        'default_filename': "README_docs",
+        'long_opt_name': "docs",
+        'site_name': "readthedocs",
+    },
+}
+
+
+def create_readme(template_filepath, dst_dirpath, websites):
+    """
+
+    Parameters
+    ----------
+    template_filepath
+    dst_dirpath
+    websites
+
+    Returns
+    -------
+
+    """
+    orig_txt = read_file(template_filepath)
+    # TODO: use threads for each site
+    regex1 = r"<site=\".*?\">.*?<\/site>"
+    for s in websites:
+        site_key = s[0]
+        site_filename = s[1]
+        copy_txt = copy.copy(orig_txt)
+        while True:
+            match1 = re.search(regex1, copy_txt, re.DOTALL | re.MULTILINE)
+            if match1:
+                site_tag = match1.group()
+                regex_open_site_tag = r"<site=\".*?\">"
+                match2 = re.search(regex_open_site_tag, site_tag,
+                                   re.DOTALL | re.MULTILINE)
+                if site_key in match2.group():
+                    close_site_tag = "</site>"
+                    first = copy_txt[:match1.start()]
+                    middle_start_pos = match1.start()+match2.end()
+                    middle_end_pos = match1.end()-len(close_site_tag)
+                    middle = copy_txt[middle_start_pos:middle_end_pos]
+                    last = copy_txt[match1.end():]
+                    copy_txt = first + middle + last
+                else:
+                    copy_txt = copy_txt[:match1.start()] + copy_txt[match1.end():]
+            else:
+                break
+        ipdb.set_trace()
+        # if
+        # site_filepath =
+        write_file(site_filename+".{}".format(README_FILE_TYPES[0]), copy_txt)
+    return 0
 
 
 def setup_argparser():
@@ -34,6 +104,41 @@ def setup_argparser():
     # ===============
     parser.add_argument("-v", "--version", action='version',
                         version='%(prog)s {}'.format(VERSION))
+    site_names = ", ".join([s for s in WEBSITES.keys()])
+    parser.add_argument(
+        "-t", "--template", dest="template_filepath",
+        required=True,
+        help='''File path to the template used for generating the READMEs from
+        different sites ({})'''.format(site_names))
+    parser.add_argument(
+        "-d", "--dst-dirpath", default=".", dest="dst_dirpath",
+        help='''Directory path where the READMEs ({}) will be saved. By 
+        default, they are saved in the directory where the script is 
+        executed.'''.format(", ".join(README_FILE_TYPES)))
+    short_opts = []
+    for k, v in WEBSITES.items():
+        site_name = v['site_name']
+        site_filename = v['default_filename']
+        if len(README_FILE_TYPES) == 1:
+            default = "{}.{}".format(site_filename, README_FILE_TYPES[0])
+        else:
+            default = "README_{}"
+        dest = "filename_{}".format(k)
+        nargs = "?"
+        help = '''{}'s README filename.'''.format(site_name)
+        first_letter_name = site_name[0][0].lower()
+        parameters = dict(dest=dest,
+                          default=default,
+                          nargs=nargs,
+                          help=help)
+        if first_letter_name in short_opts:
+            parser.add_argument("--{}".format(site_name.lower()), **parameters)
+        else:
+            short_opts.append(site_name[0].lower())
+            parser.add_argument(
+                "-{}".format(first_letter_name),
+                "--{}".format(site_name.lower()),
+                **parameters)
     return parser.parse_args()
 
 
@@ -42,11 +147,22 @@ def main():
 
     According to the user's choice of action, the script might
 
-    Notes
-    -----
-    Only one action at a time can be performed.
-
     """
+    args = setup_argparser()
+    dict_vars = vars(args)
+    websites = []
+    for dest, v in dict_vars.items():
+        if dest.startswith("filename"):
+            key = dest.lstrip("filename_")
+            if v:
+                v_without_ext = os.path.splitext(v)[0]
+                filename = v
+            else:
+                filename = WEBSITES[key]['default_filename']
+                v_without_ext = os.path.splitext(filename)[0]
+            if v is None or \
+                    v_without_ext != WEBSITES[key]['default_filename']:
+                websites.append((key, filename))
     # =======
     # Actions
     # =======
@@ -58,8 +174,8 @@ def main():
         else:
             print("Example # {} not found".format(args.example_number))
         """
-        if True:
-            pass
+        if websites:
+            retcode = create_readme(args.template_filepath, args.dst_dirpath, websites)
     except Exception:
         retcode = 1
         traceback.print_exc()
