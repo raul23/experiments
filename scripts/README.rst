@@ -142,7 +142,7 @@ which partly fakes `RPi.GPIO`_.
 
 The different code examples are those presented in
 `Examples <#examples>`_
- and show the capability of ``SimulRPi.GPIO`` for simulating I/O devices on an
+and show the capability of ``SimulRPi.GPIO`` for simulating I/O devices on an
 RPi such as push buttons and LEDS.
 
 Here is a list of the functions associated with each code example:
