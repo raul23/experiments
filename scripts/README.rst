@@ -443,7 +443,7 @@ Change Log
       * macOS: all examples involving "LEDs" and keyboard keys worked
       * RPi OS [Debian-based]: all examples involving only "LEDs" worked
 
-        **NOTE:** I was running the script ``run_examples``
+        **NOTE:** I was running the script `run_examples`_
         with ``ssh`` but ``pynput`` doesn't detect any pressed keyboard keys
         even though I set my environment variable ``Display``, added
         ``PYTHONPATH`` to *etc/sudoers* and ran the script with ``sudo``. To be
