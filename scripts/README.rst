@@ -457,18 +457,13 @@ TODOs
      creating the listener thread that monitors the keyboard and ignoring all
      parts of the ``SimulRPi.GPIO`` where the listener thread is being accessed
      (e.g. for starting it).
-* Run code
-  examples
-  involving pressing keyboard keys directly on an RPi (no ``ssh``) and post
-  results. **High priority**
-* In
-  `run_examples`_
-  , improve timer accuracy when waiting for a LED to stop
+* Run code examples involving pressing keyboard keys directly on an RPi (no
+  ``ssh``) and post results. **High priority**
+* In `run_examples`_, improve timer accuracy when waiting for a LED to stop
   blinking or for a function to stop displaying a LED. **Medium priority**
 * Investigate further why no keyboard keys could be detected when connecting to
-  an RPi through ``ssh`` and running the script
-  `run_examples`_
-  with ``sudo``. **Low priority**
+  an RPi through ``ssh`` and running the script `run_examples`_ with ``sudo``.
+  **Low priority**
 
 Resources
 =========
