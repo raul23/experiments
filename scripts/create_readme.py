@@ -69,15 +69,17 @@ def _create_readme(template_filepath, dst_dirpath, websites):
                 match2 = re.search(regex_open_site_tag, site_tag,
                                    re.DOTALL | re.MULTILINE)
                 if website_key in match2.group():
+                    # ipdb.set_trace()
                     close_site_tag = "</site>"
                     first = copy_txt[:match1.start()]
                     middle_start_pos = match1.start()+match2.end()
                     middle_end_pos = match1.end()-len(close_site_tag)
-                    middle = copy_txt[middle_start_pos:middle_end_pos]
+                    middle = copy_txt[middle_start_pos+1:middle_end_pos-1]
                     last = copy_txt[match1.end():]
                     copy_txt = first + middle + last
                 else:
-                    copy_txt = copy_txt[:match1.start()] + copy_txt[match1.end():]
+                    # ipdb.set_trace()
+                    copy_txt = copy_txt[:match1.start()] + copy_txt[match1.end()+1:]
             else:
                 break
         write_file(readme_filename, copy_txt)
