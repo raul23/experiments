@@ -2,6 +2,7 @@
 README
 ======
 
+.. _code examples: https://simulrpi.readthedocs.io/en/latest/api_reference.html#module-run_examples
 .. _Darth-Vader-RPi: https://github.com/raul23/Darth-Vader-RPi
 .. _install: #installation-instructions
 .. _let me know through SimulRPi's issues page:
@@ -435,7 +436,9 @@ Change Log
 0.0.0a
 ------
 * First version
-* Tested code `examples`_ on different platforms and here are the results:
+* Tested
+  `code examples`_
+  on different platforms and here are the results:
    * On an RPi with ``RPi.GPIO``: all examples involving LEDs and pressing
      buttons worked
    * On a computer with ``SimulRPi.GPIO``:
@@ -461,12 +464,12 @@ TODOs
   involving pressing keyboard keys directly on an RPi (no ``ssh``) and post
   results. **High priority**
 * In
-  ``run_examples``
+  `run_examples`_
   , improve timer accuracy when waiting for a LED to stop
   blinking or for a function to stop displaying a LED. **Medium priority**
 * Investigate further why no keyboard keys could be detected when connecting to
   an RPi through ``ssh`` and running the script
-  ``run_examples``
+  `run_examples`_
   with ``sudo``. **Low priority**
 
 Resources
