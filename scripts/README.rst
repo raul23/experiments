@@ -436,9 +436,7 @@ Change Log
 0.0.0a
 ------
 * First version
-* Tested
-  `code examples`_
-  on different platforms and here are the results:
+* Tested `code examples`_ on different platforms and here are the results:
    * On an RPi with ``RPi.GPIO``: all examples involving LEDs and pressing
      buttons worked
    * On a computer with ``SimulRPi.GPIO``:
