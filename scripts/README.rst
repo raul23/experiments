@@ -134,9 +134,11 @@ module or the real one.
 
 Script ``run_examples.py``
 --------------------------
-The script `run_examples`_ which you have access to once you `install`_ the
-``SimulRPi`` package allows you to run different code examples on your RPi or
-computer. If it is run on your computer, it will make use of the module
+The script `run_examples`_ which you have access to once you
+install
+`install`_
+the ``SimulRPi`` package allows you to run different code examples on your RPi
+or computer. If it is run on your computer, it will make use of the module
 ``SimulRPi.GPIO``
 which partly fakes `RPi.GPIO`_.
 
