@@ -53,6 +53,7 @@ def _create_readme(template_filepath, dst_dirpath, websites):
     orig_txt = read_file(template_filepath)
     regex1 = r"<site=\".*?\">.*?<\/site>"
     # TODO: use threads for each site
+    # TODO: add include <site> tags
     for s in websites:
         website_key = s[0]
         readme_filename = s[1]
@@ -112,6 +113,7 @@ def setup_argparser():
     # ===============
     # General options
     # ===============
+    # TODO: add overwrite option
     parser.add_argument("-v", "--version", action='version',
                         version='%(prog)s {}'.format(VERSION))
     site_names = ", ".join([s for s in WEBSITES.keys()])
