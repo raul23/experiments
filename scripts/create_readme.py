@@ -12,8 +12,8 @@ from pyutils.genutils import read_file, write_file
 
 VERSION = "0.0.0a0"
 README_FILE_EXT = ['rst']
-TEMPLATE_FILE_EXT_POSTFIX = "_t"
-TEMPLATE_FILE_EXT = [t + TEMPLATE_FILE_EXT_POSTFIX for t in README_FILE_EXT]
+TEMPLATE_FILE_EXT_PREFIX = "t_"
+TEMPLATE_FILE_EXT = [TEMPLATE_FILE_EXT_PREFIX + t for t in README_FILE_EXT]
 DEST_VARIABLE_PREFIX = "filename_"
 # Websites where the READMEs will be published, e.g. GitHub
 # Default filename without extension
@@ -64,6 +64,7 @@ def _create_readme(template_filepath, dst_dirpath, websites):
                 readme_filename)
         copy_txt = copy.copy(orig_txt)
         while True:
+            # TODO: give better variable names
             match1 = re.search(regex1, copy_txt, re.DOTALL | re.MULTILINE)
             if match1:
                 site_tag = match1.group()
@@ -183,7 +184,7 @@ def main():
         dict_vars = vars(args)
         websites = []
         _, template_ext = split_fname(args.template_filepath)
-        readme_ext = template_ext.split(TEMPLATE_FILE_EXT_POSTFIX)[0]
+        readme_ext = template_ext.split(TEMPLATE_FILE_EXT_PREFIX)[1]
         assert template_ext in TEMPLATE_FILE_EXT, \
             "Wrong template file extension: {}. Valid template file extensions " \
             "are: {}".format(os.path.basename(args.template_filepath),
