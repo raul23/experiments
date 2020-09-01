@@ -3,6 +3,7 @@ import argparse
 import copy
 import os
 import re
+import sys
 import traceback
 
 import ipdb
@@ -10,7 +11,8 @@ import ipdb
 from pyutils.genutils import read_file, write_file
 
 
-VERSION = "0.0.0a0"
+VERSION = "0.0.1a0"
+TAG_NAME = "site"
 README_FILE_EXT = ['rst']
 TEMPLATE_FILE_EXT_PREFIX = "t_"
 TEMPLATE_FILE_EXT = [TEMPLATE_FILE_EXT_PREFIX + t for t in README_FILE_EXT]
@@ -51,7 +53,7 @@ def _create_readme(template_filepath, dst_dirpath, websites):
 
     """
     orig_txt = read_file(template_filepath)
-    regex1 = r"<site=\".*?\">.*?<\/site>"
+    regex1 = r"<{}=\".*?\">.*?<\/{}>".format(TAG_NAME, TAG_NAME)
     # TODO: use threads for each site
     # TODO: add include <site> tags
     for s in websites:
@@ -68,21 +70,32 @@ def _create_readme(template_filepath, dst_dirpath, websites):
             match1 = re.search(regex1, copy_txt, re.DOTALL | re.MULTILINE)
             if match1:
                 site_tag = match1.group()
-                regex_open_site_tag = r"<site=\".*?\">"
+                regex_open_site_tag = r"<{}=\".*?\">".format(TAG_NAME)
                 match2 = re.search(regex_open_site_tag, site_tag,
                                    re.DOTALL | re.MULTILINE)
                 if website_key in match2.group():
-                    # ipdb.set_trace()
-                    close_site_tag = "</site>"
+                    close_site_tag = "</{}>".format(TAG_NAME)
                     first = copy_txt[:match1.start()]
                     middle_start_pos = match1.start()+match2.end()
                     middle_end_pos = match1.end()-len(close_site_tag)
-                    middle = copy_txt[middle_start_pos+1:middle_end_pos-1]
+                    if copy_txt[middle_start_pos] == '\n':
+                        # Remove \n, i.e. from open and close tags
+                        middle_start_pos += 1
+                        middle_end_pos -= 1
+                    middle = copy_txt[middle_start_pos:middle_end_pos]
                     last = copy_txt[match1.end():]
                     copy_txt = first + middle + last
                 else:
+                    # import ipdb
                     # ipdb.set_trace()
-                    copy_txt = copy_txt[:match1.start()] + copy_txt[match1.end()+1:]
+                    if copy_txt[match1.start()-1] == '\n' and \
+                            (len(copy_txt) == match1.end() or  # end of file
+                             copy_txt[match1.end()] == '\n'):
+                        # TODO: do a regex search
+                        match1_end = match1.end() + 1
+                    else:
+                        match1_end = match1.end()
+                    copy_txt = copy_txt[:match1.start()] + copy_txt[match1_end:]
             else:
                 break
         write_file(readme_filename, copy_txt)
@@ -207,8 +220,7 @@ def main():
                         "extension".format(fname)
                     fname_root = fname
                     fname += ".{}".format(readme_ext)
-                if arg_value is None or \
-                        fname_root != WEBSITES[key]['default_filename']:
+                if arg_value is None or fname in sys.argv:
                     websites.append((key, fname))
         # =======
         # Actions
@@ -216,6 +228,8 @@ def main():
         if websites:
             retcode = _create_readme(args.template_filepath, args.dst_dirpath,
                                      websites)
+    except SystemExit:
+        retcode = 1
     except Exception:
         retcode = 1
         traceback.print_exc()
