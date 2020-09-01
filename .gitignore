@@ -128,9 +128,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Ignore README files
+# README files
 README*.rst
-README*.rst_t
+README*.t_rst
+test.rst
 
 # Ignoe mac file
 .DS_Store
