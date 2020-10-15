@@ -1,6 +1,7 @@
 # Ref: Natural Language Processing in Action
 import re
 from collections import Counter
+from itertools import permutations
 
 
 # 1.4.3: A simple chatbot, p.13
@@ -15,8 +16,25 @@ print(re_greeting.match('Good evening Rosa Parks').groups())
 print(re_greeting.match("Good Morn'n Rosa"))
 print(re_greeting.match("yo Rosa"))
 
+my_names = set(['rosa', 'rose', 'chatty', 'chatbot', 'bot', 'chatterbot'])
+curt_names = set(['hal', 'you', 'u'])
+greeter_name = 'Marc'
+match = re_greeting.match(input())
+
+if match:
+    at_name = match.groups()[-1]
+    if at_name in curt_names:
+        print("Good one.")
+    elif at_name.lower() in my_names:
+        print("Hi {}, How are you?".format(greeter_name))
+
 print()
 
 # 1.4.4: Another way, p.18
 print(Counter("Guten Morgen Rosa".split()))
 print(Counter("Good morning, Rosa!".split()))
+
+# 1.6: Word order and grammar, p.21
+p = [" ".join(combo) for combo in
+     permutations("Good morning Rosa!".split(), 3)]
+print(p)
