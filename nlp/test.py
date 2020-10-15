@@ -17,6 +17,6 @@ print(re_greeting.match("yo Rosa"))
 
 print()
 
-# p.
+# 1.4.4: Another way, p.18
 print(Counter("Guten Morgen Rosa".split()))
 print(Counter("Good morning, Rosa!".split()))
