@@ -38,3 +38,6 @@ print(Counter("Good morning, Rosa!".split()))
 p = [" ".join(combo) for combo in
      permutations("Good morning Rosa!".split(), 3)]
 print(p)
+
+# import numpy as np
+# np.arange(1, 12 + 1).prod()  # factorial(12) = arange(1, 13).prod()
