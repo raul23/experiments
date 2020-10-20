@@ -218,5 +218,15 @@ def _2_2_4():
     print(len(set(stop_words).intersection(sklearn_stop_words)))
 
 
+# 2.2.5: Normalizing your vocabulary, p.54
+def _2_2_5():
+    # normalize the capitalization of your tokens, p.55
+    tokens = ['House', 'Visitor', 'Center']
+    normalized_tokens = [x.lower() for x in tokens]
+    print(normalized_tokens)
+
+    print()
+
+
 if __name__ == '__main__':
-    _2_2_4()
+    _2_2_5()
