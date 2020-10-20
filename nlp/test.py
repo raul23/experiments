@@ -5,11 +5,13 @@ import re
 from collections import Counter
 from itertools import permutations
 
+import nltk
 import numpy as np
 import pandas as pd
 from nltk.tokenize import RegexpTokenizer, TreebankWordTokenizer
 from nltk.tokenize.casual import casual_tokenize
 from nltk.util import ngrams
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS as sklearn_stop_words
 
 import ipdb
 
@@ -197,6 +199,23 @@ def _2_2_4():
     print(two_grams)
     print(list(ngrams(tokens, 3)))
     print([" ".join(x) for x in two_grams])
+
+    print()
+
+    # Listing 2.8: NLTK list of stop words, p.53
+    nltk.download('stopwords')
+    stop_words = nltk.corpus.stopwords.words('english')
+    print(len(stop_words))
+    print(stop_words[:7])
+    print([sw for sw in stop_words if len(sw) == 1])
+
+    print()
+
+    # Listing 2.9: NLTK list of stop words, p.54
+    print(len(sklearn_stop_words))
+    print(len(stop_words))
+    print(len(set(stop_words).union(sklearn_stop_words)))
+    print(len(set(stop_words).intersection(sklearn_stop_words)))
 
 
 if __name__ == '__main__':
