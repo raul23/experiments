@@ -56,6 +56,7 @@ def _1_6():
 
 # 2.2: Building your vocabulary with a tokenizer, p.35
 def _2_2():
+    # p.35
     sentence = """Thomas Jefferson began building Monticello at the age of 26."""
     token_sequence = str.split(sentence)
     vocab = sorted(set(token_sequence))
@@ -70,14 +71,17 @@ def _2_2():
     print()
     print(onehot_vectors)
 
+    # Listing 2.2: One-hot vector sequence for the Monticello sentence, p.36
     print()
     print(pd.DataFrame(onehot_vectors, columns=vocab))
 
+    # Listing 2.3: Prettier one-hot vectors, p.36
     print()
     df = pd.DataFrame(onehot_vectors, columns=vocab)
     df[df == 0] = ''
     print(df)
 
+    # Listing 2.5: Construct a DataFrame of bag-of-words vectors, p.41
     print()
     sentences = "Thomas Jefferson began building Monticello at the age of 26.\n"
     sentences += "Construction was done mostly by local masons and carpenters.\n"
@@ -94,10 +98,11 @@ def _2_2():
     # df.sort_index(axis=1, inplace=True)  # Method 2
     df = df[sorted(df)]  # Method 3
     print(df[df.columns[:10]])
-    # ipdb.set_trace()
 
 
+# 2.2.1: Dot product, p.41
 def _2_2_1():
+    # Listing 2.5: Example dot product calculation, p.42
     v1 = np.array([1, 2, 3])
     v2 = np.array([2, 3, 4])
     print(v1.dot(v2))
@@ -106,5 +111,38 @@ def _2_2_1():
     print(v1.reshape(-1, 1).T @ v2.reshape(-1, 1))
 
 
+# 2.2.2: Measuring bag-of-words overlap, p.42
+def _2_2_2():
+    # From 2.2
+    sentences = "Thomas Jefferson began building Monticello at the age of 26.\n"
+    sentences += "Construction was done mostly by local masons and carpenters.\n"
+    sentences += "He moved into the South Pavilion in 1770.\n"
+    sentences += "Turning Monticello into a neoclassical masterpiece was " \
+                 "Jefferson's obsession."
+    corpus = {}
+    for i, sent in enumerate(sentences.split('\n')):
+        corpus['sent{}'.format(i)] = dict((tok, 1) for tok in sent.split())
+    df = pd.DataFrame.from_records(corpus).fillna(0).astype(int).T
+    # Sort column names
+    df = df[sorted(df)]
+
+    # Listing 2.6: Overlap of word counts for two bag-of-words vectors, p.42
+    df = df.T
+    print(df.sent0.dot(df.sent1))
+    print(df.sent0.dot(df.sent2))
+    print(df.sent0.dot(df.sent3))
+
+    # Find the word that is shared by sent0 and sent3, p.43
+    print([(k, v) for (k, v) in (df.sent0 & df.sent3).items() if v])
+
+
+# 2.2.3: A token improvement, p.43
+def _2_2_3():
+    # Listing 2.7: Tokenize the Monticello sentence with a regular expression, p.43
+    sentence = """Thomas Jefferson began building Monticello at the age of 26."""
+    tokens = re.split(r'[-\s.,;!?]+', sentence)
+    print(tokens)
+
+
 if __name__ == '__main__':
-    _2_2_1()
+    _2_2_3()
