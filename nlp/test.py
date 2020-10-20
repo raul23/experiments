@@ -3,6 +3,8 @@ import re
 from collections import Counter
 from itertools import permutations
 
+import numpy as np
+
 
 # 1.4.3: A simple chatbot, p.13
 r = r"[^a-z]*([y]o|[h']?ello|ok|hey|(good[ ])?(morn[gin']{0,3}|" \
@@ -39,5 +41,9 @@ p = [" ".join(combo) for combo in
      permutations("Good morning Rosa!".split(), 3)]
 print(p)
 
-import numpy as np
 np.arange(1, 12 + 1).prod()  # factorial(12) = arange(1, 13).prod()
+
+# 2.2: Building your vocabulary with a tokenizer, p.35
+sentence = """Thomas Jefferson began building Monticello at the age of 26."""
+token_sequence = str.split(sentence)
+vocab = sorted(set(token_sequence))
