@@ -1,9 +1,14 @@
 # Ref: Natural Language Processing in Action
+# https://github.com/totalgood/nlpia
+# https://www.manning.com/books/natural-language-processing-in-action
 import re
 from collections import Counter
 from itertools import permutations
 
 import numpy as np
+import pandas as pd
+
+import ipdb
 
 
 # 1.4.3: A simple chatbot, p.13
@@ -65,6 +70,41 @@ def _2_2():
     print()
     print(onehot_vectors)
 
+    print()
+    print(pd.DataFrame(onehot_vectors, columns=vocab))
+
+    print()
+    df = pd.DataFrame(onehot_vectors, columns=vocab)
+    df[df == 0] = ''
+    print(df)
+
+    print()
+    sentences = "Thomas Jefferson began building Monticello at the age of 26.\n"
+    sentences += "Construction was done mostly by local masons and carpenters.\n"
+    sentences += "He moved into the South Pavilion in 1770.\n"
+    sentences += "Turning Monticello into a neoclassical masterpiece was " \
+                 "Jefferson's obsession."
+    corpus = {}
+    for i, sent in enumerate(sentences.split('\n')):
+        corpus['sent{}'.format(i)] = dict((tok, 1) for tok in sent.split())
+    df = pd.DataFrame.from_records(corpus).fillna(0).astype(int).T
+    # Sort column names
+    # Ref.: https://bit.ly/3oig94m (stackoverflow)
+    # df = df.reindex(sorted(df.columns), axis=1)  # Method 1
+    # df.sort_index(axis=1, inplace=True)  # Method 2
+    df = df[sorted(df)]  # Method 3
+    print(df[df.columns[:10]])
+    # ipdb.set_trace()
+
+
+def _2_2_1():
+    v1 = np.array([1, 2, 3])
+    v2 = np.array([2, 3, 4])
+    print(v1.dot(v2))
+    print((v1 * v2).sum())
+    print(sum([x1 * x2 for x1, x2 in zip(v1, v2)]))
+    print(v1.reshape(-1, 1).T @ v2.reshape(-1, 1))
+
 
 if __name__ == '__main__':
-    _2_2()
+    _2_2_1()
