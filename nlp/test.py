@@ -8,6 +8,7 @@ from itertools import permutations
 import numpy as np
 import pandas as pd
 from nltk.tokenize import RegexpTokenizer, TreebankWordTokenizer
+from nltk.tokenize.casual import casual_tokenize
 
 import ipdb
 
@@ -170,6 +171,13 @@ def _2_2_3():
     sentence = "Monticello wasn't designated as UNESCO World Heritage Site until 1987."
     tokenizer = TreebankWordTokenizer()
     print(tokenizer.tokenize(sentence))
+
+    print()
+
+    # Tokenize informal text from social networks such as Twitter and Facebook, p.48
+    message = "RT @TJMonticello Best day everrrrrrr at Monticello. Awesommmmmmeeeeeeee day :*)"
+    print(casual_tokenize(message))
+    print(casual_tokenize(message, reduce_len=True, strip_handles=True))
 
     print()
 
