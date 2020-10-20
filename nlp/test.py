@@ -7,6 +7,7 @@ from itertools import permutations
 
 import numpy as np
 import pandas as pd
+from nltk.tokenize import RegexpTokenizer, TreebankWordTokenizer
 
 import ipdb
 
@@ -142,6 +143,35 @@ def _2_2_3():
     sentence = """Thomas Jefferson began building Monticello at the age of 26."""
     tokens = re.split(r'[-\s.,;!?]+', sentence)
     print(tokens)
+
+    print()
+
+    # When to compile your regex patterns, p.45
+    pattern = re.compile(r"([-\s.,;!?])+")
+    tokens = pattern.split(sentence)
+    print(tokens[-10:])  # just the last 10 tokens
+
+    print()
+
+    # Filter the whitespace and punctuation characters, p.45
+    print([x for x in tokens if x and x not in '- \t\n.,;!?'])
+    # Another method with lambda and filter()
+    print(list(filter(lambda x: x if x and x not in '- \t\n.,;!?' else None, tokens)))
+
+    print()
+
+    # Use the NLTK function RegexpTokenizer to replicate your simple tokenizer example, p.46
+    tokenizer = RegexpTokenizer(r'\w+|$[0-9.]+|\S+')
+    print(tokenizer.tokenize(sentence))
+
+    print()
+
+    # An even better tokenizer is the Treebank Word Tokenizer from the NLTK package, p.47
+    sentence = "Monticello wasn't designated as UNESCO World Heritage Site until 1987."
+    tokenizer = TreebankWordTokenizer()
+    print(tokenizer.tokenize(sentence))
+
+    print()
 
 
 if __name__ == '__main__':
