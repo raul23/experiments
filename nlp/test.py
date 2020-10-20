@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 from nltk.tokenize import RegexpTokenizer, TreebankWordTokenizer
 from nltk.tokenize.casual import casual_tokenize
+from nltk.util import ngrams
 
 import ipdb
 
@@ -115,7 +116,7 @@ def _2_2_1():
 
 # 2.2.2: Measuring bag-of-words overlap, p.42
 def _2_2_2():
-    # From 2.2
+    # From 2.2, p.41
     sentences = "Thomas Jefferson began building Monticello at the age of 26.\n"
     sentences += "Construction was done mostly by local masons and carpenters.\n"
     sentences += "He moved into the South Pavilion in 1770.\n"
@@ -179,8 +180,24 @@ def _2_2_3():
     print(casual_tokenize(message))
     print(casual_tokenize(message, reduce_len=True, strip_handles=True))
 
+
+# 2.2.4: Extending your vocabulary with n-grams, 48
+def _2_2_4():
+    # From 2.2.3, p.45
+    sentence = """Thomas Jefferson began building Monticello at the age of 26."""
+    pattern = re.compile(r"([-\s.,;!?])+")
+    tokens = pattern.split(sentence)
+    tokens = [x for x in tokens if x and x not in '- \t\n.,;!?']
+    print(tokens)
+
     print()
+
+    # n-gram tokenizer from NLTK, p.50
+    two_grams = list(ngrams(tokens, 2))
+    print(two_grams)
+    print(list(ngrams(tokens, 3)))
+    print([" ".join(x) for x in two_grams])
 
 
 if __name__ == '__main__':
-    _2_2_3()
+    _2_2_4()
