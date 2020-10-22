@@ -15,6 +15,7 @@ from nltk.tokenize import RegexpTokenizer, TreebankWordTokenizer
 from nltk.tokenize.casual import casual_tokenize
 from nltk.util import ngrams
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS as sklearn_stop_words
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 import ipdb
 
@@ -267,8 +268,24 @@ def _2_2_5():
     print(lemmatizer.lemmatize("goodness", pos="n"))
     print(lemmatizer.lemmatize("best", pos="a"))
 
+
+# 2.3.1: VADER—A rule-based sentiment analyzer, p.64
+def _2_3_1():
+    # VADER, p.64
+    sa = SentimentIntensityAnalyzer()
+    print(sa.polarity_scores(text="Python is very readable and it's great for NLP."))
+    print(sa.polarity_scores(text="Python is not a bad choice for most applications."))
+
     print()
+
+    # VADER applied on other example statements, p.65
+    corpus = ["Absolutely perfect! Love it! :-) :-) :-)",
+              "Horrible! Completely useless. :(",
+              "It was OK. Some good and some bad things."]
+    for doc in corpus:
+        scores = sa.polarity_scores(doc)
+        print('{:+}: {}'.format(scores['compound'], doc))
 
 
 if __name__ == '__main__':
-    _2_2_5()
+    _2_3_1()
