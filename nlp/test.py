@@ -8,6 +8,8 @@ from itertools import permutations
 import nltk
 import numpy as np
 import pandas as pd
+from nltk.stem.porter import PorterStemmer
+from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import RegexpTokenizer, TreebankWordTokenizer
 from nltk.tokenize.casual import casual_tokenize
 from nltk.util import ngrams
@@ -220,12 +222,21 @@ def _2_2_4():
 
 # 2.2.5: Normalizing your vocabulary, p.54
 def _2_2_5():
-    # normalize the capitalization of your tokens, p.55
+    # Normalize the capitalization of your tokens, p.55
     tokens = ['House', 'Visitor', 'Center']
     normalized_tokens = [x.lower() for x in tokens]
     print(normalized_tokens)
 
     print()
+
+    # Stemming, p.57
+    words = ['Houses', 'house', 'housing', 'generously']
+    # Porter stemmer
+    stemmer = PorterStemmer()
+    print([stemmer.stem(word) for word in words])
+    # Snowball stemmer
+    stemmer = SnowballStemmer("english")
+    print([stemmer.stem(word) for word in words])
 
 
 if __name__ == '__main__':
