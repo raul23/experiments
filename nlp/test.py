@@ -8,6 +8,7 @@ from itertools import permutations
 import nltk
 import numpy as np
 import pandas as pd
+from nltk.stem import WordNetLemmatizer
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import RegexpTokenizer, TreebankWordTokenizer
@@ -246,6 +247,27 @@ def _2_2_5():
 
     print(stem('houses'))
     print(stem("Doctor House's calls"))
+
+    print()
+
+    # Porter stemmer, p.58
+    stemmer = PorterStemmer()
+    print(' '.join([stemmer.stem(w).strip("'") for w in "dish washer's washed dishes".split()]))
+
+    print()
+
+    # Lemmatizer, p.61
+    nltk.download('wordnet')
+    lemmatizer = WordNetLemmatizer()
+    print(lemmatizer.lemmatize("better"))
+    print(lemmatizer.lemmatize("better", pos="a"))
+    print(lemmatizer.lemmatize("good", pos="a"))
+    print(lemmatizer.lemmatize("goods", pos="a"))
+    print(lemmatizer.lemmatize("goods", pos="n"))
+    print(lemmatizer.lemmatize("goodness", pos="n"))
+    print(lemmatizer.lemmatize("best", pos="a"))
+
+    print()
 
 
 if __name__ == '__main__':
