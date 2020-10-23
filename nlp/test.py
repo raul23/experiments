@@ -9,6 +9,7 @@ from itertools import permutations
 import nltk
 import numpy as np
 import pandas as pd
+import spacy
 from nltk.stem import WordNetLemmatizer
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.snowball import SnowballStemmer
@@ -19,7 +20,6 @@ from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS as sklearn_stop_w
 from sklearn.naive_bayes import MultinomialNB
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-import futil
 from futil import read_csv
 
 import ipdb
@@ -338,5 +338,46 @@ def _2_3_2():
     print((movies.predicted_ispositive == movies.sentiment_ispositive).sum() / len(movies))
 
 
+# 3.1: Bag of words, p.71
+def _3_1():
+    # Tokenize sentence, p.72
+    sentence = """The faster Harry got to the store, the faster Harry, the faster, would get home."""
+    tokenizer = TreebankWordTokenizer()
+    tokens = tokenizer.tokenize(sentence.lower())
+    print(tokens)
+
+    print()
+
+    # Count occurrences of words, p.72
+    bag_of_words = Counter(tokens)
+    print(bag_of_words)
+    print(bag_of_words.most_common(4))
+
+    print()
+
+    # Calculate the term frequency of “harry”, p.73
+    times_harry_appears = bag_of_words['harry']
+    num_unique_words = len(bag_of_words)
+    tf = times_harry_appears / num_unique_words
+    print(round(tf, 4))
+    # ipdb.set_trace()
+
+    # Tokenize kite text and compute term occurrences, p.75
+    from data import kite_text
+    tokenizer = TreebankWordTokenizer()
+    tokens = tokenizer.tokenize(kite_text.lower())
+    token_counts = Counter(tokens)
+    print(token_counts)
+
+    print()
+
+    # Using spaCy to tokenize kite text
+    nlp = spacy.load("en_core_web_sm")
+    doc = nlp(kite_text)
+    tokens_spacy = [token.text for token in doc]
+    token_counts_spacy = Counter(tokens_spacy)
+    print(token_counts_spacy)
+
+
 if __name__ == '__main__':
-    _2_3_2()
+    _3_1()
