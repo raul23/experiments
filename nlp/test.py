@@ -2,6 +2,7 @@
 # https://github.com/totalgood/nlpia
 # https://www.manning.com/books/natural-language-processing-in-action
 import os
+import string
 import re
 from collections import Counter
 from itertools import permutations
@@ -360,7 +361,6 @@ def _3_1():
     num_unique_words = len(bag_of_words)
     tf = times_harry_appears / num_unique_words
     print(round(tf, 4))
-    # ipdb.set_trace()
 
     # Tokenize kite text and compute term occurrences, p.75
     from data import kite_text
@@ -372,6 +372,8 @@ def _3_1():
     print()
 
     # Using spaCy to tokenize kite text
+    # IMPORTANT: man-lifting is split into man and lifting
+    # Same for free-falling and lighter-than-air
     nlp = spacy.load("en_core_web_sm")
     doc = nlp(kite_text)
     tokens_spacy = [token.text for token in doc]
@@ -388,5 +390,58 @@ def _3_1():
     print(kite_counts)
 
 
+# 3.2: Vectorizing, p.76
+def _3_2():
+    # Previous code: 3.1, from p.75
+    from data import kite_text
+    tokenizer = TreebankWordTokenizer()
+    tokens = tokenizer.tokenize(kite_text.lower())
+
+    # Remove punctuation from tokens
+    tokens_without_punctuation = [token for token in tokens if token not in string.punctuation]
+    set1 = set(tokens)
+    set2 = set(tokens_without_punctuation)
+    diff = set1.difference(set2)
+    print(diff)
+
+    # For debugging
+    # tokens = tokens_without_punctuation
+
+    print()
+
+    # Previous code: 3.1, from p.75
+    nltk.download('stopwords', quiet=True)
+    stopwords = nltk.corpus.stopwords.words('english')
+    tokens = [x for x in tokens if x not in stopwords]
+    kite_counts = Counter(tokens)
+
+    # Make a vector out of the frequency dictionary, p.76
+    document_vector = []
+    doc_length = len(tokens)
+    for key, value in kite_counts.most_common():
+        document_vector.append(value / doc_length)
+    print(document_vector)
+
+    print()
+
+    # Build harry_docs corpus, p.77
+    docs = ["The faster Harry got to the store, the faster and faster Harry would get home."]
+    docs.append("Harry is hairy and faster than Jill.")
+    docs.append("Jill is not as hairy as Harry.")
+
+    # Build lexicon from these 3 documents, p.77
+    doc_tokens = []
+    for doc in docs:
+        doc_tokens += [sorted(tokenizer.tokenize(doc.lower()))]
+    print(len(doc_tokens[0]))
+    all_doc_tokens = sum(doc_tokens, [])
+    print(len(all_doc_tokens))
+    lexicon = sorted(set(all_doc_tokens))
+    print(len(lexicon))
+    print(lexicon)
+
+    ipdb.set_trace()
+
+
 if __name__ == '__main__':
-    _3_1()
+    _3_2()
