@@ -378,6 +378,15 @@ def _3_1():
     token_counts_spacy = Counter(tokens_spacy)
     print(token_counts_spacy)
 
+    print()
+
+    # Remove stopwords from kite text, p.75
+    nltk.download('stopwords', quiet=True)
+    stopwords = nltk.corpus.stopwords.words('english')
+    tokens = [x for x in tokens if x not in stopwords]
+    kite_counts = Counter(tokens)
+    print(kite_counts)
+
 
 if __name__ == '__main__':
     _3_1()
