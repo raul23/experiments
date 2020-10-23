@@ -16,6 +16,7 @@ from nltk.tokenize import RegexpTokenizer, TreebankWordTokenizer
 from nltk.tokenize.casual import casual_tokenize
 from nltk.util import ngrams
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS as sklearn_stop_words
+from sklearn.naive_bayes import MultinomialNB
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 import futil
@@ -305,19 +306,36 @@ def _2_3_2():
 
     print()
 
-    ipdb.set_trace()
+    # For debugging, use few examples
+    # movies = movies[:100]
 
     # Create Pandas DataFrame BoW from these movie review texts, p.66
     pd.set_option('display.width', 75)
     bags_of_words = []
-    ipdb.set_trace()
-    for text in movies.text:
+    for i, text in enumerate(movies.text):
+        print(i)
         bags_of_words.append(Counter(casual_tokenize(text)))
     df_bows = pd.DataFrame.from_records(bags_of_words)
     df_bows = df_bows.fillna(0).astype(int)
     print(df_bows.shape)
     print(df_bows.head())
     print(df_bows.head()[list(bags_of_words[0].keys())])
+
+    print()
+
+    # Train a Naive Bayes model on movies, p.67
+    nb = MultinomialNB()
+    nb = nb.fit(df_bows, movies.sentiment > 0)
+    # If working in the [-4, 4] range for the predicted values
+    # movies['predicted_sentiment'] = nb.predict_proba(df_bows)[:, 1] * 8 - 4
+    # If working with -4 or 4 for the predicted values
+    movies['predicted_sentiment'] = np.where(nb.predict(df_bows) is True, 4, -4)
+    movies['error'] = (movies.predicted_sentiment - movies.sentiment).abs()
+    print(movies.error.mean().round(1))
+    movies['sentiment_ispositive'] = (movies.sentiment > 0).astype(int)
+    movies['predicted_ispositive'] = (movies.predicted_sentiment > 0).astype(int)
+    print(movies['''sentiment predicted_sentiment sentiment_ispositive predicted_ispositive'''.split()].head(8))
+    print((movies.predicted_ispositive == movies.sentiment_ispositive).sum() / len(movies))
 
 
 if __name__ == '__main__':
