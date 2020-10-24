@@ -492,7 +492,17 @@ def _3_3():
 
 # 3.4: Topic modeling, p.86
 def _3_4():
+    # Load kite texts and get total word count for each document, p,87
     from data import kite_history, kite_text
+    kite_intro = kite_text.lower()
+    tokenizer = TreebankWordTokenizer()
+    intro_tokens = tokenizer.tokenize(kite_intro)
+    kite_history = kite_history.lower()
+    history_tokens = tokenizer.tokenize(kite_history)
+    intro_total = len(intro_tokens)
+    print(intro_total)
+    history_total = len(history_tokens)
+    print(history_total)
 
 
 if __name__ == '__main__':
