@@ -348,6 +348,7 @@ def _3_1():
     tokenizer = TreebankWordTokenizer()
     tokens = tokenizer.tokenize(sentence.lower())
     print(tokens)
+    ipdb.set_trace()
 
     print()
 
@@ -361,6 +362,8 @@ def _3_1():
     # Calculate the term frequency of “harry”, p.73
     times_harry_appears = bag_of_words['harry']
     num_unique_words = len(bag_of_words)
+    # TODO: I think it should be len(tokens), not unique words for computing normalized tf
+    # tf = times_harry_appears / len(tokens)
     tf = times_harry_appears / num_unique_words
     print(round(tf, 4))
 
@@ -454,6 +457,8 @@ def _3_2():
         tokens = tokenizer.tokenize(doc.lower())
         token_counts = Counter(tokens)
         for key, value in token_counts.items():
+            # TODO: I think it should len(tokens)
+            # vec[key] = value / len(tokens)
             vec[key] = value / len(lexicon)
         doc_vectors.append(vec)
 
@@ -569,5 +574,11 @@ def _3_4():
     history_tfidf['china'] = history_tf['china'] * history_idf['china']
 
 
+# 3.4.2: Relevance ranking, p.90
+def _3_4_2():
+    # Compute tf-idf for Harry example
+    document_tfidf_vectors = []
+
+
 if __name__ == '__main__':
-    _3_4()
+    _3_4_2()
