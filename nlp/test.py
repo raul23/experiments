@@ -12,6 +12,7 @@ import nltk
 import numpy as np
 import pandas as pd
 import spacy
+from matplotlib import pyplot as plt
 from nltk.stem import WordNetLemmatizer
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.snowball import SnowballStemmer
@@ -457,5 +458,37 @@ def _3_2():
         doc_vectors.append(vec)
 
 
+# 3.3: Zipf’s Law, p.83
+def _3_3():
+    # Download the Brown Cor- pus from NLTK, p.85
+    nltk.download('brown')
+    from nltk.corpus import brown
+    print(brown.words()[:10])
+    print(brown.tagged_words()[:5])
+
+    print()
+
+    # Count tokens, p.85
+    # puncs = string.punctuation
+    puncs = set((',', '.', '--', '-', '!', '?', ':', ';', '``', "''", '(', ')', '[', ']'))
+    word_list = (x.lower() for x in brown.words() if x not in puncs)
+    token_counts = Counter(word_list)
+    print(token_counts.most_common(20))
+
+    print()
+
+    # Word frequencies in the Brown corpus follow the logarithmic relationship Zipf predicted, pp.85-86
+    word_generator = (x.lower() for x in brown.words() if x not in puncs and '_' not in x and ' ' not in x)
+    token_counts = pd.DataFrame(((w, c) for (w, c) in Counter(word_generator).items() if c > 10),
+                                columns=['Token', 'Token Count'])
+    token_counts.sort_values('Token Count', ascending=False)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    token_counts[['Token Count']].plot(style='+', logx=True, logy=True, ax=ax)
+    plt.xlabel('Rank')
+    plt.ylabel('Word Count')
+    plt.show()
+
+
 if __name__ == '__main__':
-    _3_2()
+    _3_3()
