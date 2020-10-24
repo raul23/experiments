@@ -535,7 +535,7 @@ def _3_4():
             num_docs_containing_and += 1
         if 'kite' in doc:
             num_docs_containing_kite += 1
-        if 'China' in doc:
+        if 'china' in doc:
             num_docs_containing_china += 1
 
     # Compute term frequency of “China” in each document, p.88
@@ -543,6 +543,30 @@ def _3_4():
     history_tf['china'] = history_counts['china'] / history_total
     print('Term Frequency of "china" in intro is: {:.4f}'.format(intro_tf['china']))
     print('Term Frequency of "china" in history is: {:.4f}'.format(history_tf['china']))
+
+    print()
+
+    # IDF for all three terms, p. 88
+    num_docs = 2
+    intro_idf = {}
+    history_idf = {}
+    intro_idf['and'] = num_docs / num_docs_containing_and
+    history_idf['and'] = num_docs / num_docs_containing_and
+    intro_idf['kite'] = num_docs / num_docs_containing_kite
+    history_idf['kite'] = num_docs / num_docs_containing_kite
+    intro_idf['china'] = num_docs / num_docs_containing_china
+    history_idf['china'] = num_docs / num_docs_containing_china
+
+    # tf-idf for each document, p.88
+    intro_tfidf = {}
+    intro_tfidf['and'] = intro_tf['and'] * intro_idf['and']
+    intro_tfidf['kite'] = intro_tf['kite'] * intro_idf['kite']
+    intro_tfidf['china'] = intro_tf['china'] * intro_idf['china']
+
+    history_tfidf = {}
+    history_tfidf['and'] = history_tf['and'] * history_idf['and']
+    history_tfidf['kite'] = history_tf['kite'] * history_idf['kite']
+    history_tfidf['china'] = history_tf['china'] * history_idf['china']
 
 
 if __name__ == '__main__':
