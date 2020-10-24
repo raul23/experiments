@@ -504,6 +504,18 @@ def _3_4():
     history_total = len(history_tokens)
     print(history_total)
 
+    print()
+
+    # Compute term frequency of “kite” in each document, p.87
+    intro_tf = {}
+    history_tf = {}
+    intro_counts = Counter(intro_tokens)
+    intro_tf['kite'] = intro_counts['kite'] / intro_total
+    history_counts = Counter(history_tokens)
+    history_tf['kite'] = history_counts['kite'] / history_total
+    print('Term Frequency of "kite" in intro is: {:.4f}'.format(intro_tf['kite']))
+    print('Term Frequency of "kite" in history is: {:.4f}'.format(history_tf['kite']))
+
 
 if __name__ == '__main__':
     _3_4()
