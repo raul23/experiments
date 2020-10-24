@@ -23,7 +23,7 @@ from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS as sklearn_stop_w
 from sklearn.naive_bayes import MultinomialNB
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-from futil import read_csv
+from futil import cosine_sim, read_csv
 
 import ipdb
 
@@ -576,8 +576,64 @@ def _3_4():
 
 # 3.4.2: Relevance ranking, p.90
 def _3_4_2():
-    # Compute tf-idf for Harry example
+    # From 3.2 (Vectorizing), p.77
+    docs = ["The faster Harry got to the store, the faster and faster Harry would get home.",
+            "Harry is hairy and faster than Jill.",
+            "Jill is not as hairy as Harry."]
+    doc_tokens = []
+    tokenizer = TreebankWordTokenizer()
+    for doc in docs:
+        doc_tokens += [sorted(tokenizer.tokenize(doc.lower()))]
+    all_doc_tokens = sum(doc_tokens, [])
+    lexicon = sorted(set(all_doc_tokens))
+    zero_vector = OrderedDict((token, 0) for token in lexicon)
+
+    # Compute tf-idf for Harry example, p.90
     document_tfidf_vectors = []
+    for doc in docs:
+        vec = copy.copy(zero_vector)
+        tokens = tokenizer.tokenize(doc.lower())
+        token_counts = Counter(tokens)
+        for key, value in token_counts.items():
+            docs_containing_key = 0
+            for _doc in docs:
+                # TODO: it should be _doc.lower()
+                # if key in _doc:
+                if key in _doc.lower():
+                    docs_containing_key += 1
+            # TODO: it should be len(tokens)
+            tf = value / len(tokens)
+            # tf = value / len(lexicon)
+            if docs_containing_key:
+                idf = len(docs) / docs_containing_key
+            else:
+                idf = 0
+            vec[key] = tf * idf
+        document_tfidf_vectors.append(vec)
+
+    print()
+
+    # Do a basic TF-IDF-based search on the Harry corpus, p.91
+    query = "How long does it take to get to the store?"
+    query_vec = copy.copy(zero_vector)
+    tokens = tokenizer.tokenize(query.lower())
+    token_counts = Counter(tokens)
+
+    for key, value in token_counts.items():
+        docs_containing_key = 0
+        for _doc in docs:
+            if key in _doc.lower():
+                docs_containing_key += 1
+        if docs_containing_key == 0:
+            continue
+        tf = value / len(tokens)
+        idf = len(docs) / docs_containing_key
+        query_vec[key] = tf * idf
+    print(cosine_sim(query_vec, document_tfidf_vectors[0]))
+    print(cosine_sim(query_vec, document_tfidf_vectors[1]))
+    print(cosine_sim(query_vec, document_tfidf_vectors[2]))
+
+    ipdb.set_trace()
 
 
 if __name__ == '__main__':
