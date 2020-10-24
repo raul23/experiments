@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 
 
+# Ref.: NLP in action, p.82
 def cosine_sim(vec1, vec2):
     """ Let's convert our dictionaries to lists for easier matching."""
     vec1 = [val for val in vec1.values()]
