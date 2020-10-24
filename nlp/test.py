@@ -19,7 +19,7 @@ from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import RegexpTokenizer, TreebankWordTokenizer
 from nltk.tokenize.casual import casual_tokenize
 from nltk.util import ngrams
-from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS as sklearn_stop_words
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS as sklearn_stop_words, TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
@@ -633,8 +633,19 @@ def _3_4_2():
     print(cosine_sim(query_vec, document_tfidf_vectors[1]))
     print(cosine_sim(query_vec, document_tfidf_vectors[2]))
 
-    ipdb.set_trace()
+
+# 3.4.3: Tools, p.93
+def _3_4_3():
+    # From 3.2 (Vectorizing), p.77
+    docs = ["The faster Harry got to the store, the faster and faster Harry would get home.",
+            "Harry is hairy and faster than Jill.",
+            "Jill is not as hairy as Harry."]
+
+    # Use sklearn to build a TF-IDF matrix, p.93
+    vectorizer = TfidfVectorizer(min_df=1)
+    model = vectorizer.fit_transform(docs)
+    print(model.todense().round(2))
 
 
 if __name__ == '__main__':
-    _3_4_2()
+    _3_4_3()
