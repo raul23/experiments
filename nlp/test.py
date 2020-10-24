@@ -516,6 +516,34 @@ def _3_4():
     print('Term Frequency of "kite" in intro is: {:.4f}'.format(intro_tf['kite']))
     print('Term Frequency of "kite" in history is: {:.4f}'.format(history_tf['kite']))
 
+    print()
+
+    # Compute term frequency of “and” in each document, p.87
+    intro_tf['and'] = intro_counts['and'] / intro_total
+    history_tf['and'] = history_counts['and'] / history_total
+    print('Term Frequency of "and" in intro is: {:.4f}'.format(intro_tf['and']))
+    print('Term Frequency of "and" in history is: {:.4f}'.format(history_tf['and']))
+
+    print()
+
+    # Computer number of docs containing "and", "kite", and "China", respectively, p.88
+    num_docs_containing_and = 0
+    num_docs_containing_kite = 0
+    num_docs_containing_china = 0
+    for doc in [intro_tokens, history_tokens]:
+        if 'and' in doc:
+            num_docs_containing_and += 1
+        if 'kite' in doc:
+            num_docs_containing_kite += 1
+        if 'China' in doc:
+            num_docs_containing_china += 1
+
+    # Compute term frequency of “China” in each document, p.88
+    intro_tf['china'] = intro_counts['china'] / intro_total
+    history_tf['china'] = history_counts['china'] / history_total
+    print('Term Frequency of "china" in intro is: {:.4f}'.format(intro_tf['china']))
+    print('Term Frequency of "china" in history is: {:.4f}'.format(history_tf['china']))
+
 
 if __name__ == '__main__':
     _3_4()
