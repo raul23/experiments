@@ -490,5 +490,10 @@ def _3_3():
     plt.show()
 
 
+# 3.4: Topic modeling, p.86
+def _3_4():
+    from data import kite_history, kite_text
+
+
 if __name__ == '__main__':
-    _3_3()
+    _3_4()
