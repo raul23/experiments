@@ -1,10 +1,11 @@
 # Ref: Natural Language Processing in Action
 # https://github.com/totalgood/nlpia
 # https://www.manning.com/books/natural-language-processing-in-action
+import copy
 import os
 import string
 import re
-from collections import Counter
+from collections import Counter, OrderedDict
 from itertools import permutations
 
 import nltk
@@ -440,7 +441,20 @@ def _3_2():
     print(len(lexicon))
     print(lexicon)
 
-    ipdb.set_trace()
+    # Build document vectors, p.78
+    # Base vector
+    zero_vector = OrderedDict((token, 0) for token in lexicon)
+    print(zero_vector)
+
+    # Update base vector for each document
+    doc_vectors = []
+    for doc in docs:
+        vec = copy.copy(zero_vector)
+        tokens = tokenizer.tokenize(doc.lower())
+        token_counts = Counter(tokens)
+        for key, value in token_counts.items():
+            vec[key] = value / len(lexicon)
+        doc_vectors.append(vec)
 
 
 if __name__ == '__main__':
