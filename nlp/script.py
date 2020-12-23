@@ -465,7 +465,7 @@ def _3_2():
 
 # 3.3: Zipf’s Law, p.83
 def _3_3():
-    # Download the Brown Cor- pus from NLTK, p.85
+    # Download the Brown Corpus from NLTK, p.85
     nltk.download('brown')
     from nltk.corpus import brown
     print(brown.words()[:10])
